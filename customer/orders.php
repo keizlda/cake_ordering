@@ -30,7 +30,10 @@ include '../includes/header.php';
             <th>Total Amount</th>
             <th>Order Status</th>
             <th>Payment Status</th>
+            <th>Payment Method</th>
+            <th>Reference Number</th>
             <th>Delivery Method</th>
+            <th>Delivery Address</th>
         </tr>
     </thead>
     <tbody>
@@ -41,7 +44,10 @@ include '../includes/header.php';
             <td>₱<?= number_format($order['total_amount'], 2) ?></td>
             <td><?= htmlspecialchars($order['order_status']) ?></td>
             <td><?= htmlspecialchars($order['payment_status']) ?></td>
+            <td><?= htmlspecialchars($order['payment_method']) ?></td>
+            <td><?= htmlspecialchars($order['reference_number']) ?></td>
             <td><?= htmlspecialchars($order['delivery_method']) ?></td>
+            <td><?= htmlspecialchars($order['delivery_address']) ?></td>
         </tr>
         <?php endforeach; ?>
     </tbody>

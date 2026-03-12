@@ -22,7 +22,7 @@ if ($cart) {
         JOIN cake_sizes s ON ci.size_id = s.size_id
         JOIN cake_flavors f ON ci.flavor_id = f.flavor_id
         JOIN cake_fillings fi ON ci.filling_id = fi.filling_id
-        JOIN cake_toppers t ON ci.topper_id = t.topper_id
+        LEFT JOIN cake_toppers t ON ci.topper_id = t.topper_id
         WHERE ci.cart_id = ?
         ORDER BY ci.cart_item_id DESC
     ");
@@ -43,7 +43,7 @@ include '../includes/header.php';
     <div class="alert alert-warning">Your cart is empty.</div>
     <a href="products.php" class="btn btn-primary">Browse Cakes</a>
 <?php else: ?>
-    <table class="table table-bordered">
+    <table class="table table-bordered align-middle">
         <thead>
             <tr>
                 <th>Product</th>
@@ -52,9 +52,10 @@ include '../includes/header.php';
                 <th>Flavor</th>
                 <th>Filling</th>
                 <th>Topper</th>
-                <th>Qty</th>
+                <th style="width: 180px;">Quantity</th>
                 <th>Unit Price</th>
                 <th>Subtotal</th>
+                
             </tr>
         </thead>
         <tbody>
@@ -65,17 +66,51 @@ include '../includes/header.php';
                 <td><?= htmlspecialchars($item['size_name']) ?></td>
                 <td><?= htmlspecialchars($item['flavor_name']) ?></td>
                 <td><?= htmlspecialchars($item['filling_name']) ?></td>
-                <td><?= htmlspecialchars($item['topper_name']) ?></td>
-                <td><?= $item['quantity'] ?></td>
+                <td><?= htmlspecialchars($item['topper_name'] ?? 'None') ?></td>
+
+                <td>
+
+<div style="display:flex;align-items:center;gap:10px;">
+
+<form method="POST" action="update_cart_quantity.php" style="display:flex;align-items:center;gap:6px;">
+
+<input type="hidden" name="cart_item_id" value="<?= $item['cart_item_id'] ?>">
+
+<button type="submit" name="action" value="minus" class="btn btn-outline-secondary btn-sm">
+-
+</button>
+
+<span style="min-width:20px;text-align:center;">
+<?= $item['quantity'] ?>
+</span>
+
+<button type="submit" name="action" value="plus" class="btn btn-outline-secondary btn-sm">
++
+</button>
+
+
+
+</div>
+
+<small class="text-muted">Max: 5</small>
+
+</td>
+
                 <td>₱<?= number_format($item['unit_price'], 2) ?></td>
                 <td>₱<?= number_format($item['subtotal'], 2) ?></td>
+
+               
             </tr>
             <?php endforeach; ?>
         </tbody>
     </table>
 
     <h4>Total: ₱<?= number_format($total, 2) ?></h4>
-    <a href="checkout.php" class="btn btn-success">Proceed to Checkout</a>
+
+    <div class="d-flex justify-content-between mt-4">
+        <a href="products.php" class="btn btn-outline-primary">← Browse More Items</a>
+        <a href="checkout.php" class="btn btn-success">Proceed to Checkout →</a>
+    </div>
 <?php endif; ?>
 
 <?php include '../includes/footer.php'; ?>

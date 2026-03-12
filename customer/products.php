@@ -13,7 +13,7 @@ $toppers = $pdo->query("SELECT * FROM cake_toppers ORDER BY topper_name")->fetch
 include '../includes/header.php';
 ?>
 
-<h2>Browse Cakes</h2>
+<h2>🍰 Browse Our Cakes</h2>
 
 <?php if (!$products): ?>
     <div class="alert alert-warning">No available products found.</div>

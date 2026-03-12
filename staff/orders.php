@@ -26,9 +26,13 @@ include '../includes/header.php';
             <th>Customer</th>
             <th>Total</th>
             <th>Status</th>
-            <th>Payment</th>
-            <th>Delivery</th>
+            <th>Payment Status</th>
+            <th>Payment Method</th>
+            <th>Reference Number</th>
+            <th>Delivery Method</th>
+            <th>Delivery Address</th>
             <th>Update Status</th>
+            <th>Details</th>
         </tr>
     </thead>
     <tbody>
@@ -39,7 +43,10 @@ include '../includes/header.php';
             <td>₱<?= number_format($order['total_amount'], 2) ?></td>
             <td><?= htmlspecialchars($order['order_status']) ?></td>
             <td><?= htmlspecialchars($order['payment_status']) ?></td>
+            <td><?= htmlspecialchars($order['payment_method']) ?></td>
+            <td><?= htmlspecialchars($order['reference_number']) ?></td>
             <td><?= htmlspecialchars($order['delivery_method']) ?></td>
+            <td><?= htmlspecialchars($order['delivery_address']) ?></td>
             <td>
                 <form method="POST" action="update_order_status.php" class="d-flex gap-2">
                     <input type="hidden" name="order_id" value="<?= $order['order_id'] ?>">
@@ -53,6 +60,11 @@ include '../includes/header.php';
                     </select>
                     <button type="submit" class="btn btn-primary btn-sm">Save</button>
                 </form>
+            </td>
+            <td>
+                <a href="view_order.php?order_id=<?= $order['order_id'] ?>" class="btn btn-info btn-sm">
+                    View Details
+                </a>
             </td>
         </tr>
         <?php endforeach; ?>

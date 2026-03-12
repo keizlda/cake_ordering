@@ -31,15 +31,24 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
 <?php include '../includes/header.php'; ?>
 
-<h2>Login</h2>
-<?php if ($message): ?>
-    <div class="alert alert-danger"><?= $message ?></div>
-<?php endif; ?>
+<div class="auth-container">
+    <h2>Login</h2>
+    <?php if ($message): ?>
+        <div class="alert alert-danger"><?= $message ?></div>
+    <?php endif; ?>
 
-<form method="POST">
-    <input type="email" name="email" class="form-control mb-2" placeholder="Email" required>
-    <input type="password" name="password" class="form-control mb-2" placeholder="Password" required>
-    <button type="submit" class="btn btn-success">Login</button>
-</form>
+    <form method="POST">
+        <div class="mb-3">
+            <label class="form-label">Email</label>
+            <input type="email" name="email" class="form-control" placeholder="Enter your email" required>
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Password</label>
+            <input type="password" name="password" class="form-control" placeholder="Enter your password" required>
+        </div>
+        <button type="submit" class="btn btn-primary w-100">Login</button>
+    </form>
+    <p class="text-center mt-3">Don't have an account? <a href="register.php">Register here</a></p>
+</div>
 
 <?php include '../includes/footer.php'; ?>
