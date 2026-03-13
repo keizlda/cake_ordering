@@ -10,66 +10,107 @@ $stmt = $pdo->query("
     ORDER BY o.order_id DESC
 ");
 $orders = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-include '../includes/header.php';
 ?>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Orders | Sugar Delights</title>
 
-<h2>Staff - Orders</h2>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/cake_ordering/assets/css/style.css" rel="stylesheet">
+</head>
+<body class="landing-page">
 
-<?php if (!$orders): ?>
-    <div class="alert alert-info">No orders found.</div>
-<?php else: ?>
-<table class="table table-bordered">
-    <thead>
-        <tr>
-            <th>Order ID</th>
-            <th>Customer</th>
-            <th>Total</th>
-            <th>Status</th>
-            <th>Payment Status</th>
-            <th>Payment Method</th>
-            <th>Reference Number</th>
-            <th>Delivery Method</th>
-            <th>Delivery Address</th>
-            <th>Update Status</th>
-            <th>Details</th>
-        </tr>
-    </thead>
-    <tbody>
-        <?php foreach ($orders as $order): ?>
-        <tr>
-            <td><?= $order['order_id'] ?></td>
-            <td><?= htmlspecialchars($order['full_name']) ?></td>
-            <td>₱<?= number_format($order['total_amount'], 2) ?></td>
-            <td><?= htmlspecialchars($order['order_status']) ?></td>
-            <td><?= htmlspecialchars($order['payment_status']) ?></td>
-            <td><?= htmlspecialchars($order['payment_method']) ?></td>
-            <td><?= htmlspecialchars($order['reference_number']) ?></td>
-            <td><?= htmlspecialchars($order['delivery_method']) ?></td>
-            <td><?= htmlspecialchars($order['delivery_address']) ?></td>
-            <td>
-                <form method="POST" action="update_order_status.php" class="d-flex gap-2">
-                    <input type="hidden" name="order_id" value="<?= $order['order_id'] ?>">
-                    <select name="order_status" class="form-control" required>
-                        <option value="Pending" <?= $order['order_status'] === 'Pending' ? 'selected' : '' ?>>Pending</option>
-                        <option value="Confirmed" <?= $order['order_status'] === 'Confirmed' ? 'selected' : '' ?>>Confirmed</option>
-                        <option value="In Preparation" <?= $order['order_status'] === 'In Preparation' ? 'selected' : '' ?>>In Preparation</option>
-                        <option value="Ready" <?= $order['order_status'] === 'Ready' ? 'selected' : '' ?>>Ready</option>
-                        <option value="Completed" <?= $order['order_status'] === 'Completed' ? 'selected' : '' ?>>Completed</option>
-                        <option value="Cancelled" <?= $order['order_status'] === 'Cancelled' ? 'selected' : '' ?>>Cancelled</option>
-                    </select>
-                    <button type="submit" class="btn btn-primary btn-sm">Save</button>
-                </form>
-            </td>
-            <td>
-                <a href="view_order.php?order_id=<?= $order['order_id'] ?>" class="btn btn-info btn-sm">
-                    View Details
-                </a>
-            </td>
-        </tr>
-        <?php endforeach; ?>
-    </tbody>
-</table>
-<?php endif; ?>
+<nav class="navbar navbar-expand-lg main-navbar">
+    <div class="container">
+        <a class="navbar-brand brand-logo" href="/cake_ordering/staff/dashboard.php">
+            <span class="brand-text">Sugar Delights</span>
+        </a>
 
-<?php include '../includes/footer.php'; ?>
+        <div class="ms-auto d-flex gap-2 align-items-center">
+            <span class="customer-nav-name">Staff: <?= htmlspecialchars($_SESSION['full_name']) ?></span>
+            <a href="/cake_ordering/staff/dashboard.php" class="btn btn-nav-dark">Dashboard</a>
+            <a href="/cake_ordering/auth/logout.php" class="btn btn-nav-light">Logout</a>
+        </div>
+    </div>
+</nav>
+
+<div class="staff-orders-page-wrapper py-5">
+    <div class="container">
+
+        <div class="staff-orders-header-card mb-4">
+            <div>
+                <div class="hero-badge">STAFF ORDERS</div>
+                <h1>Manage Customer Orders</h1>
+                <p>Review orders, check payment references, confirm delivery details, and update order status.</p>
+            </div>
+        </div>
+
+        <?php if (!$orders): ?>
+            <div class="empty-cart-card text-center p-5">
+                <h4>No orders found</h4>
+                <p>There are currently no customer orders in the system.</p>
+            </div>
+        <?php else: ?>
+            <div class="staff-orders-list">
+                <?php foreach ($orders as $order): ?>
+                    <div class="staff-order-card">
+
+                        <div class="staff-order-top">
+                            <div>
+                                <h3>Order #<?= $order['order_id'] ?></h3>
+                                <p class="staff-order-customer"><?= htmlspecialchars($order['full_name']) ?></p>
+                            </div>
+
+                            <div class="staff-order-badges">
+                                <span class="staff-status-badge">
+                                    <?= htmlspecialchars($order['order_status']) ?>
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="staff-order-body">
+                            <div class="staff-order-grid">
+                                <div><strong>Total:</strong> ₱<?= number_format($order['total_amount'], 2) ?></div>
+                                <div><strong>Payment Status:</strong> <?= htmlspecialchars($order['payment_status']) ?></div>
+                                <div><strong>Payment Method:</strong> <?= htmlspecialchars($order['payment_method']) ?></div>
+                                <div><strong>Reference Number:</strong> <?= htmlspecialchars($order['reference_number']) ?></div>
+                                <div><strong>Delivery Method:</strong> <?= htmlspecialchars($order['delivery_method']) ?></div>
+                                <div><strong>Delivery Address:</strong> <?= htmlspecialchars($order['delivery_address']) ?></div>
+                                <div><strong>Date:</strong> <?= htmlspecialchars($order['order_date']) ?></div>
+                            </div>
+
+                            <div class="staff-order-actions mt-4">
+                                <form method="POST" action="update_order_status.php" class="staff-status-form">
+                                    <input type="hidden" name="order_id" value="<?= $order['order_id'] ?>">
+
+                                    <select name="order_status" class="form-select custom-select staff-status-select" required>
+                                        <option value="Pending" <?= $order['order_status'] === 'Pending' ? 'selected' : '' ?>>Pending</option>
+                                        <option value="Confirmed" <?= $order['order_status'] === 'Confirmed' ? 'selected' : '' ?>>Confirmed</option>
+                                        <option value="In Preparation" <?= $order['order_status'] === 'In Preparation' ? 'selected' : '' ?>>In Preparation</option>
+                                        <option value="Ready" <?= $order['order_status'] === 'Ready' ? 'selected' : '' ?>>Ready</option>
+                                        <option value="Completed" <?= $order['order_status'] === 'Completed' ? 'selected' : '' ?>>Completed</option>
+                                        <option value="Cancelled" <?= $order['order_status'] === 'Cancelled' ? 'selected' : '' ?>>Cancelled</option>
+                                    </select>
+
+                                    <button type="submit" class="btn btn-menu-add">Save Status</button>
+                                </form>
+
+                                <a href="view_order.php?order_id=<?= $order['order_id'] ?>" class="btn btn-menu-secondary">
+                                    View Details
+                                </a>
+                            </div>
+                        </div>
+
+                    </div>
+                <?php endforeach; ?>
+            </div>
+        <?php endif; ?>
+
+    </div>
+</div>
+
+</body>
+</html>

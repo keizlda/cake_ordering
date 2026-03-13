@@ -13,45 +13,77 @@ $stmt = $pdo->prepare("
 ");
 $stmt->execute([$user_id]);
 $orders = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-include '../includes/header.php';
 ?>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Orders | Sugar Delights</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/cake_ordering/assets/css/style.css" rel="stylesheet">
+</head>
+<body class="landing-page">
 
-<h2>My Orders</h2>
+<nav class="navbar navbar-expand-lg main-navbar">
+    <div class="container">
+        <a class="navbar-brand brand-logo" href="/cake_ordering/customer/dashboard.php">
+            <span class="brand-text">Sugar Delights</span>
+        </a>
 
-<?php if (!$orders): ?>
-    <div class="alert alert-info">No orders found.</div>
-<?php else: ?>
-<table class="table table-bordered">
-    <thead>
-        <tr>
-            <th>Order ID</th>
-            <th>Date</th>
-            <th>Total Amount</th>
-            <th>Order Status</th>
-            <th>Payment Status</th>
-            <th>Payment Method</th>
-            <th>Reference Number</th>
-            <th>Delivery Method</th>
-            <th>Delivery Address</th>
-        </tr>
-    </thead>
-    <tbody>
-        <?php foreach ($orders as $order): ?>
-        <tr>
-            <td><?= $order['order_id'] ?></td>
-            <td><?= htmlspecialchars($order['order_date']) ?></td>
-            <td>₱<?= number_format($order['total_amount'], 2) ?></td>
-            <td><?= htmlspecialchars($order['order_status']) ?></td>
-            <td><?= htmlspecialchars($order['payment_status']) ?></td>
-            <td><?= htmlspecialchars($order['payment_method']) ?></td>
-            <td><?= htmlspecialchars($order['reference_number']) ?></td>
-            <td><?= htmlspecialchars($order['delivery_method']) ?></td>
-            <td><?= htmlspecialchars($order['delivery_address']) ?></td>
-        </tr>
-        <?php endforeach; ?>
-    </tbody>
-</table>
-<?php endif; ?>
+        <div class="ms-auto d-flex gap-2">
+            <a href="/cake_ordering/customer/dashboard.php" class="btn btn-nav-dark">Menu</a>
+            <a href="/cake_ordering/customer/cart.php" class="btn btn-nav-light">Cart</a>
+        </div>
+    </div>
+</nav>
 
-<?php include '../includes/footer.php'; ?>
+<div class="orders-page-wrapper py-5">
+    <div class="container">
+        <h2 class="section-heading mb-4">My Orders</h2>
+
+        <?php if (!$orders): ?>
+            <div class="empty-cart-card text-center p-5">
+                <h4>No orders found</h4>
+                <p>You haven’t placed any orders yet.</p>
+                <a href="/cake_ordering/customer/dashboard.php" class="btn btn-menu-add mt-3">Browse Cakes</a>
+            </div>
+        <?php else: ?>
+            <div class="orders-list">
+                <?php foreach ($orders as $order): ?>
+                    <div class="order-card">
+                        <div class="order-card-top">
+                            <div>
+                                <h4>Order #<?= $order['order_id'] ?></h4>
+                                <p class="order-date"><?= htmlspecialchars($order['order_date']) ?></p>
+                            </div>
+                            <div class="order-status-badge">
+                                <?= htmlspecialchars($order['order_status']) ?>
+                            </div>
+                        </div>
+
+                        <div class="order-card-body">
+                            <div class="order-meta-grid">
+                                <div><strong>Total:</strong> ₱<?= number_format($order['total_amount'], 2) ?></div>
+                                <div><strong>Payment Status:</strong> <?= htmlspecialchars($order['payment_status']) ?></div>
+                                <div><strong>Payment Method:</strong> <?= htmlspecialchars($order['payment_method']) ?></div>
+                                <div><strong>Reference Number:</strong> <?= htmlspecialchars($order['reference_number']) ?></div>
+                                <div><strong>Delivery Method:</strong> <?= htmlspecialchars($order['delivery_method']) ?></div>
+                                <div><strong>Delivery Address:</strong> <?= htmlspecialchars($order['delivery_address']) ?></div>
+                            </div>
+
+                            <?php if (!empty($order['remarks'])): ?>
+                                <div class="order-remarks mt-3">
+                                    <strong>Remarks:</strong> <?= htmlspecialchars($order['remarks']) ?>
+                                </div>
+                            <?php endif; ?>
+                        </div>
+                    </div>
+                <?php endforeach; ?>
+            </div>
+        <?php endif; ?>
+    </div>
+</div>
+
+</body>
+</html>
