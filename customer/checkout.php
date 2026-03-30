@@ -205,16 +205,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         </div>
 
                         <div class="mb-3 checkout-qr-wrap">
-                            <img src="/cake_ordering/assets/uploads/qr_gcash.png" alt="GCash QR" class="checkout-qr-img">
+                            <img src="/cake_ordering/assets/uploads/gcash.jpg" alt="GCash QR" class="checkout-qr-img">
                         </div>
 
                         <div class="form-check mb-3">
                             <input class="form-check-input" type="radio" name="payment_method" id="maya" value="Maya" required>
-                            <label class="form-check-label" for="maya">Maya</label>
+                            <label class="form-check-label" for="maya">GoTyme</label>
                         </div>
 
                         <div class="mb-3 checkout-qr-wrap">
-                            <img src="/cake_ordering/assets/uploads/qr_maya.png" alt="Maya QR" class="checkout-qr-img">
+                            <img src="/cake_ordering/assets/uploads/gotyme.jpg" alt="Maya QR" class="checkout-qr-img">
                         </div>
 
                         <div class="mb-3">
@@ -312,6 +312,35 @@ anotherRadio.addEventListener("change", toggleAddressField);
 
 toggleAddressField();
 updateDeliveryUI();
+</script>
+
+<!-- QR Zoom Modal -->
+<div id="qrModal" class="qr-modal">
+    <span class="qr-close">&times;</span>
+    <img class="qr-modal-content" id="qrModalImg">
+</div>
+
+<script>
+const modal = document.getElementById("qrModal");
+const modalImg = document.getElementById("qrModalImg");
+const closeBtn = document.querySelector(".qr-close");
+
+document.querySelectorAll(".zoomable").forEach(img => {
+    img.addEventListener("click", function () {
+        modal.style.display = "block";
+        modalImg.src = this.src;
+    });
+});
+
+closeBtn.onclick = function () {
+    modal.style.display = "none";
+};
+
+modal.onclick = function (e) {
+    if (e.target !== modalImg) {
+        modal.style.display = "none";
+    }
+};
 </script>
 
 </body>

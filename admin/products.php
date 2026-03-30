@@ -52,6 +52,43 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_product'])) {
     }
 }
 
+/* DELETE PRODUCT */
+if (isset($_GET['delete'])) {
+    $delete_id = (int) $_GET['delete'];
+
+    //Check if used in orders
+    $stmt = $pdo->prepare("SELECT COUNT(*) FROM order_details WHERE product_id = ?");
+    $stmt->execute([$delete_id]);
+    $orderCount = $stmt->fetchColumn();
+
+    if ($orderCount > 0) {
+        $message = "❌ Cannot delete: Product is already used in orders.";
+    } else {
+
+        // delete related cart items
+        $stmt = $pdo->prepare("DELETE FROM cart_items WHERE product_id = ?");
+        $stmt->execute([$delete_id]);
+
+        // delete image
+        $stmt = $pdo->prepare("SELECT image FROM products WHERE product_id = ?");
+        $stmt->execute([$delete_id]);
+        $product = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        if ($product && !empty($product['image'])) {
+            $imagePath = "../assets/uploads/" . $product['image'];
+            if (file_exists($imagePath)) {
+                unlink($imagePath);
+            }
+        }
+
+        // delete product
+        $stmt = $pdo->prepare("DELETE FROM products WHERE product_id = ?");
+        $stmt->execute([$delete_id]);
+
+        $message = "✅ Product deleted successfully.";
+    }
+}
+
 /* UPDATE PRODUCT */
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_product'])) {
     $product_id = (int) $_POST['product_id'];
@@ -301,9 +338,18 @@ if (isset($_GET['edit'])) {
                                         <span class="admin-status-badge"><?= htmlspecialchars($product['availability_status']) ?></span>
                                     </div>
 
-                                    <div class="mt-3">
-                                        <a href="/cake_ordering/admin/products.php?edit=<?= $product['product_id'] ?>" class="btn btn-menu-secondary btn-sm">Edit</a>
-                                    </div>
+<div class="mt-3 d-flex align-items-center">
+    <a href="/cake_ordering/admin/products.php?edit=<?= $product['product_id'] ?>" 
+       class="btn btn-menu-secondary btn-sm">
+       Edit
+    </a>
+
+    <a href="/cake_ordering/admin/products.php?delete=<?= $product['product_id'] ?>" 
+       class="btn btn-menu-secondary btn-sm ms-auto"
+       onclick="return confirm('Are you sure you want to delete this product?');">
+       Delete
+    </a>
+</div>
                                 </div>
                             </div>
                         <?php endforeach; ?>
