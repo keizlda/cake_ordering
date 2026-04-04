@@ -103,6 +103,7 @@ Logout
 <th>Date</th>
 <th>Update</th>
 <th>Details</th>
+<th>Delete</th>
 
 </tr>
 
@@ -186,6 +187,13 @@ Save
 View
 </a>
 
+</td>
+
+<td>
+<form method="POST" action="delete_order.php" onsubmit="return confirm('Are you sure you want to delete this order?');">
+    <input type="hidden" name="order_id" value="<?= $order['order_id'] ?>">
+<button type="submit" class="btn btn-menu-secondary btn-sm">Delete</button>
+</form>
 </td>
 
 </tr>

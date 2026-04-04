@@ -205,7 +205,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         </div>
 
                         <div class="mb-3 checkout-qr-wrap">
-                            <img src="/cake_ordering/assets/uploads/gcash.jpg" alt="GCash QR" class="checkout-qr-img">
+                            <img src="/cake_ordering/assets/uploads/gcash.jpg" alt="GCash QR" class="checkout-qr-img zoomable">
                         </div>
 
                         <div class="form-check mb-3">
@@ -214,7 +214,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         </div>
 
                         <div class="mb-3 checkout-qr-wrap">
-                            <img src="/cake_ordering/assets/uploads/gotyme.jpg" alt="Maya QR" class="checkout-qr-img">
+                            <img src="/cake_ordering/assets/uploads/gotyme.jpg" alt="Maya QR" class="checkout-qr-img zoomable">
                         </div>
 
                         <div class="mb-3">
