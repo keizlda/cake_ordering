@@ -333,22 +333,28 @@ if (isset($_GET['edit'])) {
                                     <h4><?= htmlspecialchars($product['product_name']) ?></h4>
                                     <p><?= htmlspecialchars($product['description']) ?></p>
 
-                                    <div class="admin-product-meta">
-                                        <span class="product-price">₱<?= number_format($product['base_price'], 2) ?></span>
-                                        <span class="admin-status-badge"><?= htmlspecialchars($product['availability_status']) ?></span>
-                                    </div>
+<div class="admin-product-meta">
 
-<div class="mt-3 d-flex align-items-center">
-    <a href="/cake_ordering/admin/products.php?edit=<?= $product['product_id'] ?>" 
-       class="btn btn-menu-secondary btn-sm">
-       Edit
-    </a>
+    <!-- LEFT -->
+    <div class="admin-product-info">
+        <span class="product-price">₱<?= number_format($product['base_price'], 2) ?></span>
+        <span class="admin-status-badge"><?= htmlspecialchars($product['availability_status']) ?></span>
+    </div>
 
-    <a href="/cake_ordering/admin/products.php?delete=<?= $product['product_id'] ?>" 
-       class="btn btn-menu-secondary btn-sm ms-auto"
-       onclick="return confirm('Are you sure you want to delete this product?');">
-       Delete
-    </a>
+    <!-- RIGHT -->
+    <div class="d-flex gap-2">
+        <a href="/cake_ordering/admin/products.php?edit=<?= $product['product_id'] ?>" 
+           class="btn btn-menu-secondary btn-sm">
+           Edit
+        </a>
+
+        <a href="/cake_ordering/admin/products.php?delete=<?= $product['product_id'] ?>" 
+           class="btn btn-menu-secondary btn-sm"
+           onclick="return confirm('Are you sure you want to delete this product?');">
+           Delete
+        </a>
+    </div>
+
 </div>
                                 </div>
                             </div>
