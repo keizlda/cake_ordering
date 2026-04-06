@@ -19,21 +19,23 @@ $stmt = $pdo->query("
 ");
 $recentOrders = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Staff Dashboard | Sugar Delights</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Staff Dashboard | Sugar Delights</title>
 
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="/cake_ordering/assets/css/style.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="/cake_ordering/assets/css/style.css" rel="stylesheet">
 </head>
+
 <body class="landing-page">
 
 <nav class="navbar navbar-expand-lg main-navbar">
     <div class="container">
-        <a class="navbar-brand brand-logo" href="/cake_ordering/staff/dashboard.php">
+        <a class="navbar-brand brand-logo" href="#">
             <span class="brand-text">Sugar Delights</span>
         </a>
 
@@ -46,130 +48,110 @@ $recentOrders = $stmt->fetchAll(PDO::FETCH_ASSOC);
 </nav>
 
 <div class="staff-page-wrapper py-5">
-    <div class="container">
+<div class="container">
 
-        <div class="staff-hero-card mb-4">
-            <div>
-                <div class="hero-badge">STAFF PANEL</div>
-                <h1>Welcome back, <?= htmlspecialchars($_SESSION['full_name']) ?></h1>
-                <p>Monitor cake orders, update statuses, and keep daily operations smooth and organized.</p>
-            </div>
+    <!-- HERO -->
+    <div class="staff-hero-card mb-4">
+        <div>
+            <div class="hero-badge">STAFF PANEL</div>
+            <h1>Welcome back, <?= htmlspecialchars($_SESSION['full_name']) ?></h1>
+            <p>Monitor cake orders and update their status efficiently.</p>
+        </div>
 
-            <div class="staff-hero-actions">
-                <a href="/cake_ordering/staff/orders.php" class="btn btn-menu-add">Go to Orders</a>
+        <div class="staff-hero-actions">
+            <a href="/cake_ordering/staff/orders.php" class="btn btn-menu-add">Go to Orders</a>
+        </div>
+    </div>
+
+    <!-- STATS -->
+    <div class="row g-4 mb-4">
+
+        <div class="col-md-6 col-lg-4">
+            <div class="staff-stat-card">
+                <h5>Total Orders</h5>
+                <div class="staff-stat-value"><?= $totalOrders ?></div>
             </div>
         </div>
 
-        <div class="row g-4 mb-4">
-            <div class="col-md-6 col-lg-4">
-                <div class="staff-stat-card">
-                    <h5>Total Orders</h5>
-                    <div class="staff-stat-value"><?= $totalOrders ?></div>
-                </div>
-            </div>
-
-            <div class="col-md-6 col-lg-4">
-                <div class="staff-stat-card">
-                    <h5>Pending Orders</h5>
-                    <div class="staff-stat-value"><?= $pendingOrders ?></div>
-                </div>
-            </div>
-
-            <div class="col-md-6 col-lg-4">
-                <div class="staff-stat-card">
-                    <h5>Confirmed Orders</h5>
-                    <div class="staff-stat-value"><?= $confirmedOrders ?></div>
-                </div>
-            </div>
-
-            <div class="col-md-6 col-lg-4">
-                <div class="staff-stat-card">
-                    <h5>In Preparation</h5>
-                    <div class="staff-stat-value"><?= $preparingOrders ?></div>
-                </div>
-            </div>
-
-            <div class="col-md-6 col-lg-4">
-                <div class="staff-stat-card">
-                    <h5>Ready Orders</h5>
-                    <div class="staff-stat-value"><?= $readyOrders ?></div>
-                </div>
-            </div>
-
-            <div class="col-md-6 col-lg-4">
-                <div class="staff-stat-card">
-                    <h5>Completed Orders</h5>
-                    <div class="staff-stat-value"><?= $completedOrders ?></div>
-                </div>
+        <div class="col-md-6 col-lg-4">
+            <div class="staff-stat-card">
+                <h5>Pending Orders</h5>
+                <div class="staff-stat-value"><?= $pendingOrders ?></div>
             </div>
         </div>
 
-        <div class="staff-content-grid">
-            <div class="staff-main-card">
-                <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
-                    <h3 class="mb-0">Recent Orders</h3>
-                    <a href="/cake_ordering/staff/orders.php" class="btn btn-menu-secondary">View All Orders</a>
-                </div>
-
-                <?php if (!$recentOrders): ?>
-                    <div class="alert alert-info">No recent orders found.</div>
-                <?php else: ?>
-                    <div class="table-responsive">
-                        <table class="table align-middle staff-table">
-                            <thead>
-                                <tr>
-                                    <th>Order ID</th>
-                                    <th>Customer</th>
-                                    <th>Date</th>
-                                    <th>Status</th>
-                                    <th>Total</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <?php foreach ($recentOrders as $order): ?>
-                                    <tr>
-                                        <td>#<?= $order['order_id'] ?></td>
-                                        <td><?= htmlspecialchars($order['full_name']) ?></td>
-                                        <td><?= htmlspecialchars($order['order_date']) ?></td>
-                                        <td>
-                                            <span class="staff-status-badge">
-                                                <?= htmlspecialchars($order['order_status']) ?>
-                                            </span>
-                                        </td>
-                                        <td>₱<?= number_format($order['total_amount'], 2) ?></td>
-                                    </tr>
-                                <?php endforeach; ?>
-                            </tbody>
-                        </table>
-                    </div>
-                <?php endif; ?>
+        <div class="col-md-6 col-lg-4">
+            <div class="staff-stat-card">
+                <h5>Confirmed</h5>
+                <div class="staff-stat-value"><?= $confirmedOrders ?></div>
             </div>
+        </div>
 
-            <div class="staff-side-card">
-                <h3>Quick Actions</h3>
+        <div class="col-md-6 col-lg-4">
+            <div class="staff-stat-card">
+                <h5>In Preparation</h5>
+                <div class="staff-stat-value"><?= $preparingOrders ?></div>
+            </div>
+        </div>
 
-                <div class="staff-action-list">
-                    <a href="/cake_ordering/staff/orders.php" class="staff-action-item">
-                        📋 Manage Orders
-                    </a>
+        <div class="col-md-6 col-lg-4">
+            <div class="staff-stat-card">
+                <h5>Ready Orders</h5>
+                <div class="staff-stat-value"><?= $readyOrders ?></div>
+            </div>
+        </div>
 
-                    <a href="/cake_ordering/staff/orders.php" class="staff-action-item">
-                        ✅ Update Order Status
-                    </a>
-
-                    <a href="/cake_ordering/staff/orders.php" class="staff-action-item">
-                        🔍 View Order Details
-                    </a>
-                </div>
-
-                <div class="staff-note-box mt-4">
-                    <h5>Reminder</h5>
-                    <p>Make sure order statuses are updated accurately so customers and admin can track order progress properly.</p>
-                </div>
+        <div class="col-md-6 col-lg-4">
+            <div class="staff-stat-card">
+                <h5>Completed</h5>
+                <div class="staff-stat-value"><?= $completedOrders ?></div>
             </div>
         </div>
 
     </div>
+
+    <!-- RECENT ORDERS (FULL WIDTH NOW) -->
+    <div class="staff-main-card">
+        <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
+            <h3 class="mb-0">Recent Orders</h3>
+            <a href="/cake_ordering/staff/orders.php" class="btn btn-menu-secondary">View All Orders</a>
+        </div>
+
+        <?php if (!$recentOrders): ?>
+            <div class="alert alert-info">No recent orders found.</div>
+        <?php else: ?>
+            <div class="table-responsive">
+                <table class="table align-middle staff-table">
+                    <thead>
+                        <tr>
+                            <th>Order ID</th>
+                            <th>Customer</th>
+                            <th>Date</th>
+                            <th>Status</th>
+                            <th>Total</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php foreach ($recentOrders as $order): ?>
+                            <tr>
+                                <td>#<?= $order['order_id'] ?></td>
+                                <td><?= htmlspecialchars($order['full_name']) ?></td>
+                                <td><?= htmlspecialchars($order['order_date']) ?></td>
+                                <td>
+                                    <span class="staff-status-badge">
+                                        <?= htmlspecialchars($order['order_status']) ?>
+                                    </span>
+                                </td>
+                                <td>₱<?= number_format($order['total_amount'], 2) ?></td>
+                            </tr>
+                        <?php endforeach; ?>
+                    </tbody>
+                </table>
+            </div>
+        <?php endif; ?>
+    </div>
+
+</div>
 </div>
 
 </body>
